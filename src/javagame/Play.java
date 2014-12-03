@@ -1,6 +1,5 @@
 package javagame;
 
-import java.util.ArrayList;
 import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;

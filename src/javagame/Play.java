@@ -86,6 +86,8 @@ public class Play extends BasicGameState {
 		}
 		
 		
+		// test comment
+		
 		if (spawn_interval % 1== 0) {
 			for (Ball ball : balls) {
 				ball.moveDown();

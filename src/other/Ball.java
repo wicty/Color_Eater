@@ -10,8 +10,8 @@ import org.newdawn.slick.geom.Shape;
 public class Ball {
 	
 	private static final int	max_size			= 16;
-	private static final int	max_number_of_balls	= 100;
-	private static int			numberOfBalls		= 0;
+	private static final int	max_number_of_balls	= 99999;
+	private static int			number_balls		= 0;
 	private int					ID;
 	private float				x;
 	private float				y;
@@ -86,7 +86,7 @@ public class Ball {
 	}
 	*/
 	public Ball(int ID) {
-		numberOfBalls++;
+		number_balls++;
 		inProgress = true;
 		isChecking = true;
 		// ID
@@ -99,11 +99,9 @@ public class Ball {
 				// IF NO COLLISION DETECTED SPAWN CIRCLE
 				inProgress = false;
 				isChecking = false;
-				javagame.Play.spawnInterval = 10;
-				if (number_of_checks > 0) {
-					System.out.println("Spawning " + this.getID() + " ball.      " + "Number of checks: " + number_of_checks + ".    Number of balls: " + numberOfBalls);
-				}
-				this.newCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() - 70 + this.getSize() / 2, this.getSize() / 2));
+				javagame.Play.spawnInterval = 1000;
+				System.out.println("Spawning " + this.getID() + " ball.      " + "Number of checks: " + number_of_checks);
+				this.newCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() - 00 + this.getSize() / 2, this.getSize() / 2));
 			}
 			if (number_of_checks > 50000) {
 				System.out.println("max number of checks exceeded");
@@ -119,7 +117,7 @@ public class Ball {
 		// COLOR
 		this.setColor();
 		// SIZE IN PX
-		this.setSize(this.getSize() + (3 * (3 + this.getSize())));
+		this.setSize(this.getSize() + (5 * (3 + this.getSize())));
 		// POSITION
 		this.setX(this.getRandomX());
 		//this.setY(getRandomY());
@@ -288,8 +286,6 @@ public class Ball {
 		//g.fill(this.collisionCircle);
 		g.setColor(this.getColor());
 		g.fill(this.circle);
-		g.setColor(Color.black);
-		g.draw(this.circle);
 	}
 	
 	public void moveDown(int delta) {
@@ -301,8 +297,8 @@ public class Ball {
 		}
 		*/
 		if (!isChecking) {
-			this.getCircle().setCenterY((this.getCircle().getCenterY() + 0.05f * delta));
-			this.getCollisionCircle().setCenterY((this.getCollisionCircle().getCenterY() + 0.05f * delta));
+			this.getCircle().setCenterY((this.getCircle().getCenterY() + 0.1f * delta));
+			this.getCollisionCircle().setCenterY((this.getCollisionCircle().getCenterY() + 0.1f * delta));
 		}
 	}
 	
@@ -314,15 +310,11 @@ public class Ball {
 		return max_number_of_balls;
 	}
 	
-	public static int getNumberOfBalls() {
-		return numberOfBalls;
+	public static int getNumberBalls() {
+		return number_balls;
 	}
 	
 	public static boolean isReady() {
 		return !inProgress;
-	}
-	
-	public static void setNumberBalls(int i) {
-		Ball.numberOfBalls = i;
 	}
 }

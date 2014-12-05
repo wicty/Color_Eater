@@ -19,7 +19,7 @@ public class Play extends BasicGameState {
 	Image							background_image;
 	//public CopyOnWriteArrayList<Ball>	balls;
 	public static ArrayList<Ball>	balls;
-	public static int spawnInterval;
+	public static int				spawnInterval;
 	
 	public Play(int state) {
 		ID = state;
@@ -56,18 +56,20 @@ public class Play extends BasicGameState {
 		}
 		spawnInterval--;
 		// ############################################################ //
-		if (Ball.getNumberBalls() < Ball.getMaxNumberOfBalls() & Ball.isReady()&spawnInterval<0) {
-			balls.add(new Ball(balls.size()));
-		}
-		//if (input.isKeyDown(Input.KEY_DOWN)) 
-		{
+		if (!input.isKeyDown(Input.KEY_SPACE)) {
+			if (Ball.isReady() & spawnInterval < 0) {
+				if (Ball.getNumberOfBalls() > Ball.getMaxNumberOfBalls()) {
+					balls.remove(0);
+					Ball.setNumberBalls(Ball.getNumberOfBalls() - 1);
+				}
+				balls.add(new Ball(balls.size()));
+			}
 			for (Ball ball : balls) {
-			if (ball.getCircle() != null) {
-				ball.moveDown(delta);
+				if (ball.getCircle() != null) {
+					ball.moveDown(delta);
+				}
 			}
 		}
-		}
-		
 		// ############################################################ //
 		/*
 		if (spawn_interval % 1== 0) {
@@ -87,7 +89,7 @@ public class Play extends BasicGameState {
 	// |____| |___||________||_____|\____||______.'|________||____| |___| 
 	//                                                                    
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		background_image.setImageColor(.75f, .75f, .75f);
+		//background_image.setImageColor(.75f, .75f, .75f);
 		background_image.draw(0, 0);
 		g.setColor(Color.black);
 		g.drawString("ID: " + this.getID(), 20, 20);

@@ -9,15 +9,23 @@ import org.newdawn.slick.geom.Shape;
 
 public class Ball {
 	
-	private static final int	max_size	= 16;
+	private static final int	max_size			= 16;
+	private static final int	max_number_of_balls	= 99999;
+	private static int			number_balls		= 0;
 	private int					ID;
-	private int					x;
-	private int					y;
+	private float				x;
+	private float				y;
 	private Color				color;
 	private int					size;
 	private Shape				circle;
-	private Shape				outline;
+	private Shape				collisionCircle;
+	private static Random		r					= new Random();
+	private static boolean		inProgress;
+	private boolean				isChecking;
+	// bonus variables
+	private int					number_of_checks;
 	
+	/*
 	public Ball() {
 		this.setSize(1);
 		switch (this.getSize() - 1) {
@@ -76,11 +84,72 @@ public class Ball {
 		this.setCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2));
 		this.setOutline(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2 + 10));
 	}
-	
+	*/
 	public Ball(int ID) {
-		Random r = new Random();
+		number_balls++;
+		inProgress = true;
+		isChecking = true;
+		// ID
 		this.setID(ID);
+		// CHECK FOR COLLISION
+		number_of_checks = 0;
+		while (inProgress) {
+			number_of_checks++;
+			if (circleCanSpawnCheck()) {
+				// IF NO COLLISION DETECTED SPAWN CIRCLE
+				inProgress = false;
+				isChecking = false;
+				javagame.Play.spawnInterval = 1000;
+				System.out.println("Spawning " + this.getID() + " ball.      " + "Number of checks: " + number_of_checks);
+				this.newCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() - 00 + this.getSize() / 2, this.getSize() / 2));
+			}
+			if (number_of_checks > 50000) {
+				System.out.println("max number of checks exceeded");
+				//inProgress = false;
+				break;
+			}
+		}
+	}
+	
+	private boolean circleCanSpawnCheck() {
+		// SIZE
 		this.setSize(r.nextInt(Ball.getMaxSize()) + 1);
+		// COLOR
+		this.setColor();
+		// SIZE IN PX
+		this.setSize(this.getSize() + (5 * (3 + this.getSize())));
+		// POSITION
+		this.setX(this.getRandomX());
+		//this.setY(getRandomY());
+		this.setY(0);
+		// CREATE COLLISION CIRCLE
+		this.newCollisionCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2));
+		int i = 0;
+		//if (javagame.Play.balls.size() > 1)
+		{
+			for (Ball ball : javagame.Play.balls) {
+				if (this.collides(ball)) {
+					i++;
+				}
+			}
+			if (i > 0) {
+				return false;
+			}
+		}
+		return true;
+	}
+	
+	private int getRandomY() {
+		return r.nextInt(576 - this.getSize());
+	}
+	
+	private int getRandomX() {
+		/*this.getSize() / 2 +*/
+		/*- (this.getSize() / 2)*/
+		return r.nextInt(1024 - this.getSize());
+	}
+	
+	private void setColor() {
 		switch (this.getSize() - 1) {
 			case 0:
 				this.setColor(255, 0, 0);
@@ -131,13 +200,6 @@ public class Ball {
 				this.setColor(0, 0, 255);
 				break;
 		}
-		this.setSize(this.getSize() + (5 * (3 + this.getSize())));
-		this.setX(this.getSize() / 2 + r.nextInt(1024 - this.getSize() - (this.getSize() / 2)));
-		this.setY(this.getSize() / 2 + r.nextInt(576 - this.getSize() - (this.getSize() / 2)));
-		this.setY(0 - this.getSize() * 2);
-		this.setY(10);
-		this.setCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2));
-		this.setOutline(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2 + 10));
 	}
 	
 	public int getID() {
@@ -148,28 +210,32 @@ public class Ball {
 		ID = iD;
 	}
 	
-	private int getX() {
+	private float getX() {
 		return x;
 	}
 	
-	private void setX(int x) {
+	private void setX(float x) {
 		this.x = x;
 	}
 	
-	private int getY() {
+	private float getY() {
 		return y;
 	}
 	
 	public boolean collides(Ball ball) {
-		//System.out.println("check");
-		Shape first = this.getOutline();
-		Shape second = ball.getOutline();
+		Shape first = this.getCollisionCircle();
+		Shape second = ball.getCollisionCircle();
+		/*
 		if (first.getMaxY() < second.getMinY()) return false;
-		if (first.getMaxX() < second.getMinX()) return false;
 		if (first.getMinY() > second.getMaxY()) return false;
+		if (first.getMaxX() < second.getMinX()) return false;
 		if (first.getMinX() > second.getMaxX()) return false;
 		return true;
+		*/
 		/*
+		if (first.getMaxX() > second.getMinX() & first.getMinX() < second.getMaxX()) return true;
+		return false;
+		*/
 		if (first.intersects(second)) {
 			return true;
 		}
@@ -177,11 +243,10 @@ public class Ball {
 			return true;
 		}
 		return false;
-		*/
 	}
 	
-	private void setY(int y) {
-		this.y = y;
+	private void setY(float f) {
+		this.y = f;
 	}
 	
 	private Color getColor() {
@@ -204,32 +269,52 @@ public class Ball {
 		return circle;
 	}
 	
-	private void setCircle(Shape circle) {
+	private void newCircle(Shape circle) {
 		this.circle = circle;
 	}
 	
-	public Shape getOutline() {
-		return outline;
+	public Shape getCollisionCircle() {
+		return collisionCircle;
 	}
 	
-	private void setOutline(Shape outline) {
-		this.outline = outline;
+	private void newCollisionCircle(Shape outline) {
+		this.collisionCircle = outline;
 	}
 	
 	public void render(Graphics g) throws SlickException {
-		//g.setColor(Color.black);
-		//g.fill(this.outline);
+		//g.setColor(Color.white);
+		//g.fill(this.collisionCircle);
 		g.setColor(this.getColor());
 		g.fill(this.circle);
 	}
 	
-	public void moveDown() {
-		this.setY(this.getY() + 1);
-		this.getCircle().setCenterY(this.getY() + this.getSize());
-		this.getOutline().setCenterY(this.getY() + this.getSize());
+	public void moveDown(int delta) {
+		/*
+		if (!isChecking) {
+			this.setY((float) (this.getY() + 0.1 * delta));
+			this.getCircle().setCenterY(this.getY() + this.getSize());
+			this.getCollisionCircle().setCenterY(this.getY() + this.getSize());
+		}
+		*/
+		if (!isChecking) {
+			this.getCircle().setCenterY((this.getCircle().getCenterY() + 0.1f * delta));
+			this.getCollisionCircle().setCenterY((this.getCollisionCircle().getCenterY() + 0.1f * delta));
+		}
 	}
 	
 	public static int getMaxSize() {
 		return max_size;
+	}
+	
+	public static int getMaxNumberOfBalls() {
+		return max_number_of_balls;
+	}
+	
+	public static int getNumberBalls() {
+		return number_balls;
+	}
+	
+	public static boolean isReady() {
+		return !inProgress;
 	}
 }

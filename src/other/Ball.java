@@ -22,7 +22,6 @@ public class Ball {
 	private static Random		r					= new Random();
 	private static boolean		inProgress;
 	private boolean				isChecking;
-	// bonus variables
 	private int					number_of_checks;
 	
 	/*
@@ -99,9 +98,9 @@ public class Ball {
 				// IF NO COLLISION DETECTED SPAWN CIRCLE
 				inProgress = false;
 				isChecking = false;
-				javagame.Play.spawnInterval = 10;
+				javagame.Play.spawnInterval = 10;   
 				if (number_of_checks > 0) {
-					System.out.println("Spawning " + this.getID() + " ball.      " + "Number of checks: " + number_of_checks + ".    Number of balls: " + numberOfBalls);
+					System.out.println("Number of balls: " + numberOfBalls + "    Number of spawn checks: " + number_of_checks);
 				}
 				this.newCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() - 70 + this.getSize() / 2, this.getSize() / 2));
 			}

@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import other.Ball;
+import other.Player;
 
 public class Play extends BasicGameState {
 	
@@ -19,6 +20,7 @@ public class Play extends BasicGameState {
 	Image							background_image;
 	//public CopyOnWriteArrayList<Ball>	balls;
 	public static ArrayList<Ball>	balls;
+	public static ArrayList<Player>	players;
 	public static int				spawnInterval;
 	
 	public Play(int state) {
@@ -37,6 +39,8 @@ public class Play extends BasicGameState {
 		//balls = new CopyOnWriteArrayList<Ball>();
 		spawnInterval = 0;
 		balls = new ArrayList<Ball>();
+		players = new ArrayList<Player>();
+		players.add(new Player(players.size()));
 	}
 	
 	//  _____  _____  _______  ______        _     _________  ________  
@@ -58,7 +62,7 @@ public class Play extends BasicGameState {
 		// ############################################################ //
 		if (!input.isKeyDown(Input.KEY_SPACE)) {
 			if (Ball.isReady() & spawnInterval < 0) {
-				if (Ball.getNumberOfBalls() > Ball.getMaxNumberOfBalls()) {
+				if (Ball.getNumberOfBalls() >= Ball.getMaxNumberOfBalls()) {
 					balls.remove(0);
 					Ball.setNumberBalls(Ball.getNumberOfBalls() - 1);
 				}
@@ -69,6 +73,20 @@ public class Play extends BasicGameState {
 					ball.moveDown(delta);
 				}
 			}
+		}
+		// ############################################################ //
+		if (input.isKeyDown(Input.KEY_A) || input.isKeyDown(Input.KEY_LEFT)) { // move left
+			players.get(0).move("left", delta);
+		}
+		if (input.isKeyDown(Input.KEY_D) || input.isKeyDown(Input.KEY_RIGHT)) { // move right
+			;
+			players.get(0).move("right", delta);
+		}
+		if (input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP)) { // move right
+			players.get(0).move("up", delta);
+		}
+		if (input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN)) { // move right
+			players.get(0).move("down", delta);
 		}
 		// ############################################################ //
 		/*
@@ -97,6 +115,14 @@ public class Play extends BasicGameState {
 			for (Ball ball : balls) {
 				if (ball.getCircle() != null) {
 					ball.render(gc.getGraphics());
+				}
+			}
+		}
+		// ############################################################ //
+		if (players.size() > 0) {
+			for (Player player : players) {
+				if (player.isAlive()) {
+					player.render(gc.getGraphics());
 				}
 			}
 		}

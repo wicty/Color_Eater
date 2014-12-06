@@ -98,9 +98,9 @@ public class Ball {
 				// IF NO COLLISION DETECTED SPAWN CIRCLE
 				inProgress = false;
 				isChecking = false;
-				javagame.Play.spawnInterval = 10;   
+				javagame.Play.spawnTimeDelay = 10;   
 				if (number_of_checks > 0) {
-					System.out.println("Number of balls: " + numberOfBalls + "    Number of spawn checks: " + number_of_checks);
+					//System.out.println("Number of balls: " + numberOfBalls + "    Number of spawn checks: " + number_of_checks);
 				}
 				this.newCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() - 70 + this.getSize() / 2, this.getSize() / 2));
 			}
@@ -140,9 +140,9 @@ public class Ball {
 		return true;
 	}
 	
-	private int getRandomY() {
+	/*private int getRandomY() {
 		return r.nextInt(576 - this.getSize());
-	}
+	}*/
 	
 	private int getRandomX() {
 		/*this.getSize() / 2 +*/

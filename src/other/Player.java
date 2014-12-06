@@ -15,13 +15,14 @@ public class Player {
 	private int		size;
 	private Shape	circle;
 	private boolean	alive;
+	private int		points;
 	
 	public Player(int ID) {
 		this.setAlive(true);
 		// ID
 		this.setID(ID);
 		// SIZE
-		this.setSize(20);
+		this.setSize(1);
 		// COLOR
 		this.setColor();
 		// SIZE IN PX
@@ -153,20 +154,68 @@ public class Player {
 		g.draw(this.circle);
 	}
 	
-	public void move(String direction, int delta) {
+	public void move(String direction, int delta, boolean slow, boolean fast) {
+		float speed = 0.10f;
+		if (slow) {
+			speed = 0.05f;
+		}
+		else if (fast) {
+			speed += 0.15f;
+		}
 		switch (direction) {
 			case "right":
-				this.getCircle().setCenterX((this.getCircle().getCenterX() + 0.2f * delta));
+				if (this.getCircle().getMaxX() < 1024) {
+					this.getCircle().setCenterX((this.getCircle().getCenterX() + speed * delta));
+				}
 				break;
 			case "left":
-				this.getCircle().setCenterX((this.getCircle().getCenterX() - 0.2f * delta));
+				if (this.getCircle().getMinX() > 0) {
+					this.getCircle().setCenterX((this.getCircle().getCenterX() - speed * delta));
+				}
 				break;
 			case "up":
-				this.getCircle().setCenterY((this.getCircle().getCenterY() - 0.2f * delta));
+				if (this.getCircle().getMinY() > 0) {
+					this.getCircle().setCenterY((this.getCircle().getCenterY() - speed * delta));
+				}
 				break;
 			case "down":
-				this.getCircle().setCenterY((this.getCircle().getCenterY() + 0.2f * delta));
+				if (this.getCircle().getMaxY() < 576) {
+					this.getCircle().setCenterY((this.getCircle().getCenterY() + speed * delta));
+				}
 				break;
 		}
+	}
+	
+	public boolean collides(Ball ball) {
+		Shape first = this.getCircle();
+		Shape second = ball.getCircle();
+		if (first.intersects(second)) {
+			return true;
+		}
+		if (first.contains(second)) {
+			return true;
+		}
+		return false;
+	}
+	
+	public void checkCollisions() {
+		for (int i = 0; i < javagame.Play.balls.size(); i++) {
+			Ball ball = javagame.Play.balls.get(i);
+			if (ball.getCircle() != null) {
+				if (this.collides(ball)) {
+					// TODO check for size than destroy
+					// TODO particle effect on getCenterPos
+					javagame.Play.balls.remove(i);
+				}
+			}
+		}
+	}
+	
+	public int getPoints() {
+		return points;
+	}
+	
+	public void setPoints(int points) {
+		this.points = points;
 	}
 }

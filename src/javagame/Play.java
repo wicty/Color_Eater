@@ -9,6 +9,10 @@ import other.Player;
 
 public class Play extends BasicGameState {
 	
+	public Play(int state) {
+		ID = state;
+	}
+	
 	//  ____   ____  _       _______     _____       _       ______   _____     ________   ______   
 	// |_  _| |_  _|/ \     |_   __ \   |_   _|     / \     |_   _ \ |_   _|   |_   __  |.' ____ \  
 	//   \ \   / / / _ \      | |__) |    | |      / _ \      | |_) |  | |       | |_ \_|| (___ \_| 
@@ -16,16 +20,12 @@ public class Play extends BasicGameState {
 	//     \ ' /_/ /   \ \_  _| |  \ \_  _| |_  _/ /   \ \_  _| |__) |_| |__/ | _| |__/ || \____) | 
 	//      \_/|____| |____||____| |___||_____||____| |____||_______/|________||________| \______.' 
 	//                                                                                                                                          
-	public int						ID	= 0;
-	Image							background_image;
-	//public CopyOnWriteArrayList<Ball>	balls;
-	public static ArrayList<Ball>	balls;
-	public static ArrayList<Player>	players;
-	public static int				spawnInterval;
-	
-	public Play(int state) {
-		ID = state;
-	}
+	public int									ID	= 0;
+	Image										background_image;
+	//public static ArrayList<Ball>	balls;				
+	public static CopyOnWriteArrayList<Ball>	balls;
+	public static ArrayList<Player>				players;
+	public static int							spawnTimeDelay;
 	
 	//  _____  ____  _____  _____  _________  
 	// |_   _||_   \|_   _||_   _||  _   _  | 
@@ -36,9 +36,9 @@ public class Play extends BasicGameState {
 	//                                                         
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
 		background_image = new Image("res/background/colorful.png");
-		//balls = new CopyOnWriteArrayList<Ball>();
-		spawnInterval = 0;
-		balls = new ArrayList<Ball>();
+		spawnTimeDelay = 0;
+		//balls = new ArrayList<Ball>(); 
+		balls = new CopyOnWriteArrayList<Ball>();
 		players = new ArrayList<Player>();
 		players.add(new Player(players.size()));
 	}
@@ -51,22 +51,29 @@ public class Play extends BasicGameState {
 	//     `.__.'    |_____|  |______.'|____| |____||_____|  |________| 
 	//
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
-		// ############################################################ //	
+		//////////////////////////////////////////////////////////////////
 		Input input = gc.getInput();
 		for (int i = 1; i < javagame.Game.ID; i++) {
 			if (input.isKeyPressed(i + 1)) {
 				sbg.enterState(i);
 			}
 		}
-		spawnInterval--;
-		// ############################################################ //
+		spawnTimeDelay--;
+		//////////////////////////////////////////////////////////////////
 		if (!input.isKeyDown(Input.KEY_SPACE)) {
-			if (Ball.isReady() & spawnInterval < 0) {
-				if (Ball.getNumberOfBalls() >= Ball.getMaxNumberOfBalls()) {
-					balls.remove(0);
-					Ball.setNumberBalls(Ball.getNumberOfBalls() - 1);
+			if (Ball.isReady() & spawnTimeDelay < 0) {
+				for (int i = 0; i < javagame.Play.balls.size(); i++) {
+					Ball ball = javagame.Play.balls.get(i);
+					if (ball.getCircle() != null) {
+						if (ball.getCircle().getMinY() > 576) {
+							javagame.Play.balls.remove(i);
+						}
+					}
 				}
-				balls.add(new Ball(balls.size()));
+				if (balls.size() < Ball.getMaxNumberOfBalls()) {
+					balls.add(new Ball(balls.size()));
+					System.out.println("Number of balls: " + balls.size());
+				}
 			}
 			for (Ball ball : balls) {
 				if (ball.getCircle() != null) {
@@ -74,29 +81,26 @@ public class Play extends BasicGameState {
 				}
 			}
 		}
-		// ############################################################ //
+		//////////////////////////////////////////////////////////////////
 		if (input.isKeyDown(Input.KEY_A) || input.isKeyDown(Input.KEY_LEFT)) { // move left
-			players.get(0).move("left", delta);
+			players.get(0).move("left", delta, input.isKeyDown(Input.KEY_N), input.isKeyDown(Input.KEY_M));
 		}
 		if (input.isKeyDown(Input.KEY_D) || input.isKeyDown(Input.KEY_RIGHT)) { // move right
-			;
-			players.get(0).move("right", delta);
+			players.get(0).move("right", delta, input.isKeyDown(Input.KEY_N), input.isKeyDown(Input.KEY_M));
 		}
 		if (input.isKeyDown(Input.KEY_W) || input.isKeyDown(Input.KEY_UP)) { // move right
-			players.get(0).move("up", delta);
+			players.get(0).move("up", delta, input.isKeyDown(Input.KEY_N), input.isKeyDown(Input.KEY_M));
 		}
 		if (input.isKeyDown(Input.KEY_S) || input.isKeyDown(Input.KEY_DOWN)) { // move right
-			players.get(0).move("down", delta);
+			players.get(0).move("down", delta, input.isKeyDown(Input.KEY_N), input.isKeyDown(Input.KEY_M));
 		}
-		// ############################################################ //
-		/*
-		if (spawn_interval % 1== 0) {
-			for (Ball ball : balls) {
-				ball.moveDown();
+		//////////////////////////////////////////////////////////////////
+		for (Player player : players) {
+			if (player.isAlive()) {
+				player.checkCollisions();
 			}
 		}
-		*/
-		// ############################################################ //
+		//////////////////////////////////////////////////////////////////
 	}
 	
 	//  _______     ________  ____  _____  ______   ________  _______     
@@ -107,10 +111,13 @@ public class Play extends BasicGameState {
 	// |____| |___||________||_____|\____||______.'|________||____| |___| 
 	//                                                                    
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
+		//////////////////////////////////////////////////////////////////
 		//background_image.setImageColor(.75f, .75f, .75f);
 		background_image.draw(0, 0);
+		//////////////////////////////////////////////////////////////////
 		g.setColor(Color.black);
 		g.drawString("ID: " + this.getID(), 20, 20);
+		//////////////////////////////////////////////////////////////////
 		if (balls.size() > 0) {
 			for (Ball ball : balls) {
 				if (ball.getCircle() != null) {
@@ -118,7 +125,7 @@ public class Play extends BasicGameState {
 				}
 			}
 		}
-		// ############################################################ //
+		//////////////////////////////////////////////////////////////////
 		if (players.size() > 0) {
 			for (Player player : players) {
 				if (player.isAlive()) {
@@ -126,6 +133,7 @@ public class Play extends BasicGameState {
 				}
 			}
 		}
+		//////////////////////////////////////////////////////////////////
 	}
 	
 	public int getID() {

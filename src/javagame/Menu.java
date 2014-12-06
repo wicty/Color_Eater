@@ -55,7 +55,8 @@ public class Menu extends BasicGameState {
 	//                                                                    
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		background_image.draw(0, 0);
-		g.drawString("ID: " + this.getID(), 20, 20);
+		g.setColor(Color.white);
+		g.drawString("ID: " + this.getID(), 10, 25);
 	}
 	
 	public int getID() {

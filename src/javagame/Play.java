@@ -44,15 +44,6 @@ public class Play extends BasicGameState {
 		players = new ArrayList<Player>();
 		players.add(new Player(players.size()));
 		pef = new ParticleEffect("ball");
-		
-		
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
-		pef.doEffect(100,100);
 	}
 	
 	//  _____  _____  _______  ______        _     _________  ________  
@@ -113,7 +104,10 @@ public class Play extends BasicGameState {
 			}
 		}
 		//////////////////////////////////////////////////////////////////
-		
+		players.get(0).checkWin();
+		//////////////////////////////////////////////////////////////////
+		pef.update(delta);
+		//////////////////////////////////////////////////////////////////
 	}
 	
 	//  _______     ________  ____  _____  ______   ________  _______     
@@ -126,9 +120,9 @@ public class Play extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		//////////////////////////////////////////////////////////////////
 		//background_image.setImageColor(.75f, .75f, .75f);
-		//background_image.draw(0, 0);
+		background_image.draw(0, 0);
 		//////////////////////////////////////////////////////////////////
-		g.setColor(Color.black);
+		g.setColor(Color.white);
 		g.drawString("ID: " + this.getID(), 10, 25);
 		//////////////////////////////////////////////////////////////////
 		if (balls.size() > 0) {

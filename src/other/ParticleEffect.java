@@ -11,7 +11,7 @@ import org.newdawn.slick.particles.ParticleSystem;
 public class ParticleEffect {
 	
 	private ParticleSystem					pSys;
-	private ArrayList<ConfigurableEmitter>	emitters;	
+	private ArrayList<ConfigurableEmitter>	emitters;
 	private boolean							isEnabled;
 	File									xmlFile;
 	
@@ -23,7 +23,7 @@ public class ParticleEffect {
 			xmlFile = new File("res/effects/" + type + "_emitter.xml");
 			emitters = new ArrayList<ConfigurableEmitter>();
 			this.emitters.add(ParticleIO.loadEmitter(xmlFile));
-			this.emitters.get(this.emitters.size() - 1).setPosition(1000,1000);
+			this.emitters.get(this.emitters.size() - 1).setPosition(1000, 1000);
 			pSys.addEmitter(this.emitters.get(this.emitters.size() - 1));
 		}
 		catch (Exception e) {
@@ -33,7 +33,7 @@ public class ParticleEffect {
 		pSys.setBlendingMode(ParticleSystem.BLEND_COMBINE);
 	}
 	
-	public void doEffect(int x, int y) {
+	public void doEffect(float x, float y) {
 		try {
 			this.emitters.add(ParticleIO.loadEmitter(xmlFile));
 			this.emitters.get(this.emitters.size() - 1).setPosition(x, y);

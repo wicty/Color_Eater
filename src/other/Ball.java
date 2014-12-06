@@ -322,6 +322,10 @@ public class Ball {
 		return !inProgress;
 	}
 	
+	public static void setInProgress(boolean state){
+		Ball.inProgress = state;
+	}
+	
 	public static void setNumberBalls(int i) {
 		Ball.numberOfBalls = i;
 	}

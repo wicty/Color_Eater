@@ -26,7 +26,7 @@ public class Player {
 		// ID
 		this.setID(ID);
 		// SIZE
-		this.setLevel(20);
+		this.setLevel(16);
 		// COLOR
 		this.changeColor();
 		// SIZE IN PX
@@ -118,7 +118,7 @@ public class Player {
 				this.setColor(0, 0, 255);
 				break;
 			default:
-				this.setColor(50, 50, 50);
+				this.setColor(255, 255, 255);
 				break;
 		}
 	}
@@ -211,7 +211,6 @@ public class Player {
 						javagame.Play.balls.remove(ID);
 						// ADD POINTS
 						points++;
-						System.out.println("Level: " + this.getLevel() + "       Points: " + this.getPoints());
 						if (this.getPoints() % Player.pointsToNextLevel == 0) {
 							// INCREASE LEVEL
 							this.setLevel(this.getLevel() + 1);
@@ -226,12 +225,12 @@ public class Player {
 					else if (this.getLevel() > ball.getLevel()) {
 						// DESTROY BALL
 						javagame.Play.balls.remove(ID);
+						javagame.Play.pef.doEffect(ball.getCircle().getCenterX(), ball.getCircle().getCenterY());
 					}
 					else if (this.getLevel() < ball.getLevel()) {
 						// TODO DEATH
 						javagame.Play.balls.remove(ID);
-						System.out.println("do effect");
-						javagame.Play.pef.doEffect((int) ball.getCircle().getCenterX(), (int) ball.getCircle().getCenterY());
+						System.out.println("Death");
 					}
 				}
 			}
@@ -252,5 +251,26 @@ public class Player {
 	
 	public void setLevel(int level) {
 		this.level = level;
+	}
+	
+	public void checkWin() {
+		
+		if (this.level > 16) {
+			Ball.setInProgress(true);
+			for (int ID = javagame.Play.balls.size()-1; ID >= 0; ID--) {
+				//System.out.println("ID: "+ID+"   size: "+javagame.Play.balls.size());
+				Ball ball = javagame.Play.balls.get(ID);
+				javagame.Play.balls.remove(ID);
+				javagame.Play.pef.doEffect(ball.getCircle().getCenterX(), ball.getCircle().getCenterY());
+			}
+			this.setLevel(16);
+			// COLOR
+			this.changeColor();
+			// SIZE IN PX
+			this.setSize(this.getLevel() + (3 * (3 + this.getLevel())));
+			// CREATE  CIRCLE
+			this.newCircle(new Circle(this.getCircle().getCenterX(), this.getCircle().getCenterY(), this.getSize() / 2));
+			Ball.setInProgress(false);
+		}
 	}
 }

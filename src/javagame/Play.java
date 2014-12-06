@@ -5,6 +5,7 @@ import java.util.concurrent.CopyOnWriteArrayList;
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
 import other.Ball;
+import other.ParticleEffect;
 import other.Player;
 
 public class Play extends BasicGameState {
@@ -26,6 +27,7 @@ public class Play extends BasicGameState {
 	public static CopyOnWriteArrayList<Ball>	balls;
 	public static ArrayList<Player>				players;
 	public static int							spawnTimeDelay;
+	public static ParticleEffect				pef;
 	
 	//  _____  ____  _____  _____  _________  
 	// |_   _||_   \|_   _||_   _||  _   _  | 
@@ -41,6 +43,16 @@ public class Play extends BasicGameState {
 		balls = new CopyOnWriteArrayList<Ball>();
 		players = new ArrayList<Player>();
 		players.add(new Player(players.size()));
+		pef = new ParticleEffect("ball");
+		
+		
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
+		pef.doEffect(100,100);
 	}
 	
 	//  _____  _____  _______  ______        _     _________  ________  
@@ -101,6 +113,7 @@ public class Play extends BasicGameState {
 			}
 		}
 		//////////////////////////////////////////////////////////////////
+		
 	}
 	
 	//  _______     ________  ____  _____  ______   ________  _______     
@@ -113,7 +126,7 @@ public class Play extends BasicGameState {
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
 		//////////////////////////////////////////////////////////////////
 		//background_image.setImageColor(.75f, .75f, .75f);
-		background_image.draw(0, 0);
+		//background_image.draw(0, 0);
 		//////////////////////////////////////////////////////////////////
 		g.setColor(Color.black);
 		g.drawString("ID: " + this.getID(), 10, 25);
@@ -133,6 +146,8 @@ public class Play extends BasicGameState {
 				}
 			}
 		}
+		//////////////////////////////////////////////////////////////////
+		pef.render();
 		//////////////////////////////////////////////////////////////////
 	}
 	

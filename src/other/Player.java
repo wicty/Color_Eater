@@ -26,7 +26,7 @@ public class Player {
 		// ID
 		this.setID(ID);
 		// SIZE
-		this.setLevel(1);
+		this.setLevel(20);
 		// COLOR
 		this.changeColor();
 		// SIZE IN PX
@@ -224,13 +224,14 @@ public class Player {
 						}
 					}
 					else if (this.getLevel() > ball.getLevel()) {
-						// DESTROY
+						// DESTROY BALL
 						javagame.Play.balls.remove(ID);
-						// TODO particle effect on getCenterPos
 					}
 					else if (this.getLevel() < ball.getLevel()) {
-						// DEATH
+						// TODO DEATH
 						javagame.Play.balls.remove(ID);
+						System.out.println("do effect");
+						javagame.Play.pef.doEffect((int) ball.getCircle().getCenterX(), (int) ball.getCircle().getCenterY());
 					}
 				}
 			}

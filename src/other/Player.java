@@ -8,25 +8,29 @@ import org.newdawn.slick.geom.Shape;
 
 public class Player {
 	
-	private int		ID;
-	private float	x;
-	private float	y;
-	private Color	color;
-	private int		size;
-	private Shape	circle;
-	private boolean	alive;
-	private int		points;
+	private static int		pointsToNextLevel	= 1;
+	private static float	speed				= .1f;
+	private static float	speedModifier		= .05f;
+	private int				ID;
+	private float			x;
+	private float			y;
+	private Color			color;
+	private int				size;
+	private int				level;
+	private Shape			circle;
+	private boolean			alive;
+	private int				points;
 	
 	public Player(int ID) {
 		this.setAlive(true);
 		// ID
 		this.setID(ID);
 		// SIZE
-		this.setSize(1);
+		this.setLevel(1);
 		// COLOR
-		this.setColor();
+		this.changeColor();
 		// SIZE IN PX
-		this.setSize(this.getSize() + (3 * (3 + this.getSize())));
+		this.setSize(this.getLevel() + (3 * (3 + this.getLevel())));
 		// POSITION
 		this.setX(500);
 		//this.setY(getRandomY());
@@ -63,8 +67,8 @@ public class Player {
 		return color;
 	}
 	
-	private void setColor() {
-		switch (this.getSize() - 1) {
+	private void changeColor() {
+		switch (this.getLevel() - 1) {
 			case 0:
 				this.setColor(255, 0, 0);
 				break;
@@ -155,12 +159,12 @@ public class Player {
 	}
 	
 	public void move(String direction, int delta, boolean slow, boolean fast) {
-		float speed = 0.10f;
+		float speed = Player.speed;
 		if (slow) {
-			speed = 0.05f;
+			speed -= Player.speedModifier;
 		}
 		else if (fast) {
-			speed += 0.15f;
+			speed += Player.speedModifier;
 		}
 		switch (direction) {
 			case "right":
@@ -199,13 +203,35 @@ public class Player {
 	}
 	
 	public void checkCollisions() {
-		for (int i = 0; i < javagame.Play.balls.size(); i++) {
-			Ball ball = javagame.Play.balls.get(i);
+		for (int ID = 0; ID < javagame.Play.balls.size(); ID++) {
+			Ball ball = javagame.Play.balls.get(ID);
 			if (ball.getCircle() != null) {
 				if (this.collides(ball)) {
-					// TODO check for size than destroy
-					// TODO particle effect on getCenterPos
-					javagame.Play.balls.remove(i);
+					if (this.getLevel() == ball.getLevel()) {
+						javagame.Play.balls.remove(ID);
+						// ADD POINTS
+						points++;
+						System.out.println("Level: " + this.getLevel() + "       Points: " + this.getPoints());
+						if (this.getPoints() % Player.pointsToNextLevel == 0) {
+							// INCREASE LEVEL
+							this.setLevel(this.getLevel() + 1);
+							// COLOR
+							this.changeColor();
+							// SIZE IN PX
+							this.setSize(this.getLevel() + (3 * (3 + this.getLevel())));
+							// CREATE  CIRCLE
+							this.newCircle(new Circle(this.getCircle().getCenterX(), this.getCircle().getCenterY(), this.getSize() / 2));
+						}
+					}
+					else if (this.getLevel() > ball.getLevel()) {
+						// DESTROY
+						javagame.Play.balls.remove(ID);
+						// TODO particle effect on getCenterPos
+					}
+					else if (this.getLevel() < ball.getLevel()) {
+						// DEATH
+						javagame.Play.balls.remove(ID);
+					}
 				}
 			}
 		}
@@ -217,5 +243,13 @@ public class Player {
 	
 	public void setPoints(int points) {
 		this.points = points;
+	}
+	
+	public int getLevel() {
+		return level;
+	}
+	
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }

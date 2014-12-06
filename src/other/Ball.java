@@ -10,16 +10,17 @@ import org.newdawn.slick.geom.Shape;
 public class Ball {
 	
 	private static final int	max_size			= 16;
-	private static final int	max_number_of_balls	= 100;
+	private static final int	max_number_of_balls	= 200;
 	private static int			numberOfBalls		= 0;
+	private static Random		r					= new Random();
 	private int					ID;
 	private float				x;
 	private float				y;
 	private Color				color;
 	private int					size;
+	private int					level;
 	private Shape				circle;
 	private Shape				collisionCircle;
-	private static Random		r					= new Random();
 	private static boolean		inProgress;
 	private boolean				isChecking;
 	private int					number_of_checks;
@@ -98,7 +99,7 @@ public class Ball {
 				// IF NO COLLISION DETECTED SPAWN CIRCLE
 				inProgress = false;
 				isChecking = false;
-				javagame.Play.spawnTimeDelay = 10;   
+				javagame.Play.spawnTimeDelay = 10;
 				if (number_of_checks > 0) {
 					//System.out.println("Number of balls: " + numberOfBalls + "    Number of spawn checks: " + number_of_checks);
 				}
@@ -114,11 +115,11 @@ public class Ball {
 	
 	private boolean circleCanSpawnCheck() {
 		// SIZE
-		this.setSize(r.nextInt(Ball.getMaxSize()) + 1);
+		this.setLevel(r.nextInt(Ball.getMaxSize()) + 1);
 		// COLOR
 		this.setColor();
 		// SIZE IN PX
-		this.setSize(this.getSize() + (3 * (3 + this.getSize())));
+		this.setSize(this.getLevel() + (3 * (3 + this.getLevel())));
 		// POSITION
 		this.setX(this.getRandomX());
 		//this.setY(getRandomY());
@@ -143,15 +144,15 @@ public class Ball {
 	/*private int getRandomY() {
 		return r.nextInt(576 - this.getSize());
 	}*/
-	
 	private int getRandomX() {
 		/*this.getSize() / 2 +*/
 		/*- (this.getSize() / 2)*/
+		
 		return r.nextInt(1024 - this.getSize());
 	}
 	
 	private void setColor() {
-		switch (this.getSize() - 1) {
+		switch (this.getLevel() - 1) {
 			case 0:
 				this.setColor(255, 0, 0);
 				break;
@@ -323,5 +324,13 @@ public class Ball {
 	
 	public static void setNumberBalls(int i) {
 		Ball.numberOfBalls = i;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public void setLevel(int level) {
+		this.level = level;
 	}
 }

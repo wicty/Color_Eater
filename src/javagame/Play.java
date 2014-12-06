@@ -72,7 +72,7 @@ public class Play extends BasicGameState {
 				}
 				if (balls.size() < Ball.getMaxNumberOfBalls()) {
 					balls.add(new Ball(balls.size()));
-					System.out.println("Number of balls: " + balls.size());
+					//System.out.println("Number of balls: " + balls.size());
 				}
 			}
 			for (Ball ball : balls) {
@@ -116,7 +116,7 @@ public class Play extends BasicGameState {
 		background_image.draw(0, 0);
 		//////////////////////////////////////////////////////////////////
 		g.setColor(Color.black);
-		g.drawString("ID: " + this.getID(), 20, 20);
+		g.drawString("ID: " + this.getID(), 10, 25);
 		//////////////////////////////////////////////////////////////////
 		if (balls.size() > 0) {
 			for (Ball ball : balls) {

@@ -10,7 +10,7 @@ import org.newdawn.slick.geom.Shape;
 public class Ball {
 	
 	private static final int	max_size			= 16;
-	private static final int	max_number_of_balls	= 200;
+	private static final int	max_number_of_balls	= 200;//200
 	private static int			numberOfBalls		= 0;
 	private static Random		r					= new Random();
 	private int					ID;
@@ -25,66 +25,6 @@ public class Ball {
 	private boolean				isChecking;
 	private int					number_of_checks;
 	
-	/*
-	public Ball() {
-		this.setSize(1);
-		switch (this.getSize() - 1) {
-			case 0:
-				this.setColor(255, 0, 0);
-				break;
-			case 1:
-				this.setColor(255, 67, 0);
-				break;
-			case 2:
-				this.setColor(255, 136, 0);
-				break;
-			case 3:
-				this.setColor(255, 204, 0);
-				break;
-			case 4:
-				this.setColor(238, 255, 0);
-				break;
-			case 5:
-				this.setColor(170, 255, 0);
-				break;
-			case 6:
-				this.setColor(101, 255, 0);
-				break;
-			case 7:
-				this.setColor(34, 255, 0);
-				break;
-			case 8:
-				this.setColor(0, 255, 33);
-				break;
-			case 9:
-				this.setColor(0, 255, 101);
-				break;
-			case 10:
-				this.setColor(0, 255, 169);
-				break;
-			case 11:
-				this.setColor(0, 255, 237);
-				break;
-			case 12:
-				this.setColor(0, 203, 255);
-				break;
-			case 13:
-				this.setColor(0, 136, 255);
-				break;
-			case 14:
-				this.setColor(0, 68, 255);
-				break;
-			case 15:
-				this.setColor(0, 0, 255);
-				break;
-		}
-		this.setSize(this.getSize() + (5 * (3 + this.getSize())));
-		this.setX(1024/2);
-		this.setY(576/2);
-		this.setCircle(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2));
-		this.setOutline(new Circle(this.getX() + this.getSize() / 2, this.getY() + this.getSize() / 2, this.getSize() / 2 + 10));
-	}
-	*/
 	public Ball(int ID) {
 		numberOfBalls++;
 		inProgress = true;

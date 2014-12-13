@@ -26,7 +26,7 @@ public class Player {
 		// ID
 		this.setID(ID);
 		// SIZE
-		this.setLevel(16);
+		this.setLevel(1);
 		// COLOR
 		this.changeColor();
 		// SIZE IN PX

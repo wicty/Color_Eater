@@ -15,11 +15,11 @@ public class Game extends StateBasedGame {
 	}
 	
 	public void initStatesList(GameContainer gc) throws SlickException {
-		this.addState(new Menu(ID++)); // ID: 1
-		this.addState(new Play(ID++));
-		this.addState(new Options(ID++));
-		this.addState(new Win(ID++));
-		this.addState(new Lost(ID++));
+		this.addState(new Menu(ID++)); 		// ID: 1
+		this.addState(new Play(ID++)); 		// ID: 2
+		this.addState(new Options(ID++)); 	// ID: 3
+		this.addState(new Win(ID++)); 		// ID: 4
+		this.addState(new Lost(ID++)); 		// ID: 5
 		this.enterState(2);
 	}
 	

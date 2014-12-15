@@ -28,6 +28,8 @@ public class Play extends BasicGameState {
 	public static ArrayList<Player>				players;
 	public static int							spawnTimeDelay;
 	public static ParticleEffect				pef;
+	public static boolean						win;
+	public static boolean						lost;
 	
 	//  _____  ____  _____  _____  _________  
 	// |_   _||_   \|_   _||_   _||  _   _  | 
@@ -54,6 +56,16 @@ public class Play extends BasicGameState {
 	//     `.__.'    |_____|  |______.'|____| |____||_____|  |________| 
 	//
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
+		//////////////////////////////////////////////////////////////////
+		if (win){
+			sbg.enterState(4);
+		}
+		if (lost){
+			sbg.enterState(5);
+		}
+		
+		
+		
 		//////////////////////////////////////////////////////////////////
 		Input input = gc.getInput();
 		for (int i = 1; i < javagame.Game.ID; i++) {

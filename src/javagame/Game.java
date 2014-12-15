@@ -29,7 +29,7 @@ public class Game extends StateBasedGame {
 			appgc = new AppGameContainer(new Game(gamename));
 			appgc.setDisplayMode(1024, 576, false); // fullscreen = true
 			//appgc.setTargetFrameRate(frameRate);
-			//appgc.setShowFPS(false);
+			appgc.setShowFPS(false);
 			//appgc.setAlwaysRender(true);
 			//appgc.setMouseGrabbed(true); // hide mouse cursor
 			appgc.start();

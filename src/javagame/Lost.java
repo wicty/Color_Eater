@@ -1,7 +1,9 @@
 package javagame;
 
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Circle;
 import org.newdawn.slick.state.*;
+import other.Ball;
 
 public class Lost extends BasicGameState {
 	
@@ -13,6 +15,7 @@ public class Lost extends BasicGameState {
 	//      \_/|____| |____||____| |___||_____||____| |____||_______/|________||________| \______.' 
 	//                                                                                                                                          
 	public int	ID	= 0;
+	Image		background_image;
 	
 	public Lost(int state) {
 		ID = state;
@@ -26,6 +29,7 @@ public class Lost extends BasicGameState {
 	// |_____||_____|\____||_____|  |_____|   
 	//                                                         
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		background_image = new Image("res/background/lost.png");
 	}
 	
 	//  _____  _____  _______  ______        _     _________  ________  
@@ -42,6 +46,19 @@ public class Lost extends BasicGameState {
 				sbg.enterState(i);
 			}
 		}
+		if (input.isKeyPressed(Input.KEY_ENTER)){
+			Ball.setInProgress(true);
+			for (int ID = javagame.Play.balls.size() - 1; ID >= 0; ID--) {
+				//System.out.println("ID: "+ID+"   size: "+javagame.Play.balls.size());
+				Ball ball = javagame.Play.balls.get(ID);
+				javagame.Play.balls.remove(ID);
+				javagame.Play.pef.doEffect(ball.getCircle().getCenterX(), ball.getCircle().getCenterY());
+			}
+
+			Ball.setInProgress(false);
+			javagame.Play.win = false;
+			sbg.enterState(2);
+		}
 	}
 	
 	//  _______     ________  ____  _____  ______   ________  _______     
@@ -52,7 +69,8 @@ public class Lost extends BasicGameState {
 	// |____| |___||________||_____|\____||______.'|________||____| |___| 
 	//                                                                    
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawString("ID: " + this.getID(), 20, 20);
+		background_image.draw(0, 0);
+		//g.drawString("ID: " + this.getID(), 20, 20);
 	}
 	
 	public int getID() {

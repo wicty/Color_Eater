@@ -57,7 +57,7 @@ public class Play extends BasicGameState {
 	//
 	public void update(GameContainer gc, StateBasedGame sbg, int delta) throws SlickException {
 		//////////////////////////////////////////////////////////////////
-		if (win){
+		if (win& spawnTimeDelay < 0){
 			sbg.enterState(4);
 		}
 		if (lost){
@@ -135,7 +135,7 @@ public class Play extends BasicGameState {
 		background_image.draw(0, 0);
 		//////////////////////////////////////////////////////////////////
 		g.setColor(Color.white);
-		g.drawString("ID: " + this.getID(), 10, 25);
+		//g.drawString("ID: " + this.getID(), 10, 25);
 		//////////////////////////////////////////////////////////////////
 		if (balls.size() > 0) {
 			for (Ball ball : balls) {

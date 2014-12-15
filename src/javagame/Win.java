@@ -13,6 +13,7 @@ public class Win extends BasicGameState {
 	//      \_/|____| |____||____| |___||_____||____| |____||_______/|________||________| \______.' 
 	//                                                                                                                                          
 	public int	ID	= 0;
+	Image		background_image;
 	
 	public Win(int state) {
 		ID = state;
@@ -26,6 +27,7 @@ public class Win extends BasicGameState {
 	// |_____||_____|\____||_____|  |_____|   
 	//                                                         
 	public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+		background_image = new Image("res/background/win.png");
 	}
 	
 	//  _____  _____  _______  ______        _     _________  ________  
@@ -52,7 +54,8 @@ public class Win extends BasicGameState {
 	// |____| |___||________||_____|\____||______.'|________||____| |___| 
 	//                                                                    
 	public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
-		g.drawString("ID: "+ this.getID(), 20, 20);
+		background_image.draw(0, 0);
+		//g.drawString("ID: "+ this.getID(), 20, 20);
 	}
 	
 	public int getID() {

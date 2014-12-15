@@ -286,6 +286,7 @@ public class Player {
 			this.newCircle(new Circle(this.getCircle().getCenterX(), this.getCircle().getCenterY(), this.getSize() / 2));
 			Ball.setInProgress(true);
 			javagame.Play.win = true;
+			javagame.Play.spawnTimeDelay = 100;
 		}
 	}
 }

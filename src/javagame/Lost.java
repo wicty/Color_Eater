@@ -56,7 +56,7 @@ public class Lost extends BasicGameState {
 			}
 
 			Ball.setInProgress(false);
-			javagame.Play.win = false;
+			javagame.Play.lost = false;
 			sbg.enterState(2);
 		}
 	}

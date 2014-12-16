@@ -2,6 +2,7 @@ package javagame;
 
 import org.newdawn.slick.*;
 import org.newdawn.slick.state.*;
+import other.Ball;
 
 public class Win extends BasicGameState {
 	
@@ -43,6 +44,21 @@ public class Win extends BasicGameState {
 			if (input.isKeyPressed(i + 1)) {
 				sbg.enterState(i);
 			}
+		}
+		
+		
+		if (input.isKeyPressed(Input.KEY_ENTER)){
+			Ball.setInProgress(true);
+			for (int ID = javagame.Play.balls.size() - 1; ID >= 0; ID--) {
+				//System.out.println("ID: "+ID+"   size: "+javagame.Play.balls.size());
+				Ball ball = javagame.Play.balls.get(ID);
+				javagame.Play.balls.remove(ID);
+				javagame.Play.pef.doEffect(ball.getCircle().getCenterX(), ball.getCircle().getCenterY());
+			}
+
+			Ball.setInProgress(false);
+			javagame.Play.win = false;
+			sbg.enterState(2);
 		}
 	}
 	
